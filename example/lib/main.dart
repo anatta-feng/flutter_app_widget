@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_app_widget/flutter_app_widget.dart';
+
+import 'flutter_widget_data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +26,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    FlutterAppWidget.widgetClicked.listen((event) {
+      print('widgetClicked: $event');
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -46,6 +53,8 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  late final textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,9 +62,23 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: Column(
+          children: [
+            Text(
+              'Enter a text 🙏🏻',
+            ),
+            TextField(controller: textController,),
+            ElevatedButton(onPressed: () async {
+              var result = await FlutterAppWidget.setItem('widgetData', jsonEncode(FlutterWidgetData(textController.text)), 'group.com.toner');
+              FlutterAppWidget.reloadAllTimelines();
+              print('[Update Button]: $result');
+            }, child: const Text('Update Button'))
+          ],
         ),
+        floatingActionButton: FloatingActionButton(onPressed: () async {
+          var s = await FlutterAppWidget.setItem("as", "as", "sad");
+          print(s);
+        },),
       ),
     );
   }
