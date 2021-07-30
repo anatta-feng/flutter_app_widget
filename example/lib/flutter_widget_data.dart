@@ -1,12 +1,15 @@
 class FlutterWidgetData {
-  final String text;
+  final bool start;
+  final String message;
 
-  FlutterWidgetData(this.text);
+  FlutterWidgetData(
+    this.start,
+    this.message,
+  );
 
-  FlutterWidgetData.fromJson(Map<String, dynamic> json): text = json['text'];
+  FlutterWidgetData.fromJson(Map<String, dynamic> json)
+      : message = json['message'],
+        start = json['start'];
 
-  Map<String, dynamic> toJson() =>
-      {
-        'text': text
-      };
+  Map<String, dynamic> toJson() => {'message': message, 'start': start};
 }

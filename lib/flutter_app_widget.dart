@@ -30,28 +30,46 @@ class FlutterAppWidget {
     });
   }
 
-  static late final String _appGroupId;
-
   static void initialized({required String appGroupId}) {
-    _appGroupId = appGroupId;
     _initializedIOS(appGroupId: appGroupId);
   }
 
   static Future<void> _initializedIOS({required String appGroupId}) async {
-    await _channel.invokeMethod('initialized', <String, String>{'appGroupId': appGroupId});
+    await _channel.invokeMethod(
+        'initialized', <String, String>{'appGroupId': appGroupId});
   }
 
-  static void reloadAllTimelines() async {
-    await _channel.invokeMethod('reloadAllTimelines');
+  static Future<void> updateWidget(
+      {required String androidWidgetProviderClass}) async {
+    await _channel.invokeMethod('updateWidget', <String, String>{
+      'androidWidgetProviderClass': androidWidgetProviderClass
+    });
   }
 
-  static dynamic getItem(String key, String appGroup) async {
-    return await _channel.invokeMethod(
-        'getItem', <String, String>{'key': key, 'appGroup': appGroup});
+  static dynamic setWidgetData(
+      {required String key, required String value}) async {
+    return await _channel
+        .invokeMethod('setWidgetData', <String, dynamic>{'key': key, 'value': value});
   }
 
-  static dynamic setItem(String key, dynamic value, String appGroup) async {
-    return await _channel.invokeMethod('setItem',
-        <String, dynamic>{'key': key, 'value': value, 'appGroup': appGroup});
+  static dynamic setWidgetDataAndUpdate(
+      {required String key,
+      required String value,
+      required String androidWidgetProviderClass}) async {
+    final result = await setWidgetData(key: key, value: value);
+    await updateWidget(androidWidgetProviderClass: androidWidgetProviderClass);
+    return result;
+  }
+
+  static Future<bool> removeWidgetData({required String key}) async {
+    return await _channel
+        .invokeMethod('removeWidgetData', <String, String>{'key': key});
+  }
+
+  static dynamic removeWidgetDataAndUpdate(
+      {required String key, required String androidWidgetProviderClass}) async {
+    final result = await removeWidgetData(key: key);
+    await updateWidget(androidWidgetProviderClass: androidWidgetProviderClass);
+    return result;
   }
 }

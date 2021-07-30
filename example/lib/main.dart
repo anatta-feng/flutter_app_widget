@@ -21,12 +21,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  String uri = '';
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
     FlutterAppWidget.widgetClicked.listen((event) {
+      uri = event?.toString() ?? '';
+      setState(() {
+
+      });
       print('widgetClicked: $event');
     });
   }
@@ -65,20 +70,32 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: [
             Text(
-              'Enter a text 🙏🏻',
+              'Enter a text 🙏🏻, launch uri: $uri',
             ),
-            TextField(controller: textController,),
-            ElevatedButton(onPressed: () async {
-              var result = await FlutterAppWidget.setItem('widgetData', jsonEncode(FlutterWidgetData(textController.text)), 'group.com.toner');
-              FlutterAppWidget.reloadAllTimelines();
-              print('[Update Button]: $result');
-            }, child: const Text('Update Button'))
+            TextField(
+              controller: textController,
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  print(jsonEncode(
+                      FlutterWidgetData(true, textController.text)));
+                  final result = await FlutterAppWidget.setWidgetDataAndUpdate(
+                      key: 'widgetData',
+                      value: jsonEncode(
+                          FlutterWidgetData(true, textController.text)),
+                      androidWidgetProviderClass: 'RunningWidgetProvider');
+                  print('[Update Button]: $result');
+                },
+                child: const Text('Start')),
+            ElevatedButton(
+                onPressed: () async {
+                  await FlutterAppWidget.removeWidgetDataAndUpdate(
+                      key: 'widgetData',
+                      androidWidgetProviderClass: 'RunningWidgetProvider');
+                },
+                child: const Text('Pause')),
           ],
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () async {
-          var s = await FlutterAppWidget.setItem("as", "as", "sad");
-          print(s);
-        },),
       ),
     );
   }
