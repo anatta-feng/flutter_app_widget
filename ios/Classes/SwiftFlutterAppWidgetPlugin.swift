@@ -15,10 +15,11 @@ public class SwiftFlutterAppWidgetPlugin: NSObject, FlutterPlugin, FlutterStream
             }
         }
     }
+    private var pendingLaunchUrl: URL?
     
     private var eventSink: FlutterEventSink?
     
-    private let noInitializedError = FlutterError(code: "-7", message: "AppGroupId not set. Call setAppGroupId first", details: nil)
+    private let noInitializedError = FlutterError(code: "-1", message: "AppGroupId not set. Call initialized first", details: nil)
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_app_widget", binaryMessenger: registrar.messenger())
@@ -50,6 +51,10 @@ public class SwiftFlutterAppWidgetPlugin: NSObject, FlutterPlugin, FlutterStream
             result(nil);
             break
         case "setWidgetData":
+            if SwiftFlutterAppWidgetPlugin.appGroupId == nil {
+                result(noInitializedError)
+                return
+            }
             if let args = call.arguments as? [String: String],
                let key = args["key"],
                let value = args["value"] {
@@ -63,6 +68,10 @@ public class SwiftFlutterAppWidgetPlugin: NSObject, FlutterPlugin, FlutterStream
             }
             break
         case "removeWidgetData":
+            if SwiftFlutterAppWidgetPlugin.appGroupId == nil {
+                result(noInitializedError)
+                return
+            }   
             if let args = call.arguments as? [String: String],
                let key = args["key"] {
                 
@@ -82,6 +91,9 @@ public class SwiftFlutterAppWidgetPlugin: NSObject, FlutterPlugin, FlutterStream
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         eventSink = events
+        if pendingLaunchUrl != nil {
+            eventSink?.self(pendingLaunchUrl?.absoluteString)
+        }
         return nil
     }
     
@@ -105,6 +117,9 @@ public class SwiftFlutterAppWidgetPlugin: NSObject, FlutterPlugin, FlutterStream
         if(launchUrl != nil && isWidgetUrl(url: launchUrl!)) {
             initialUrl = launchUrl?.absoluteURL
             latestUrl = initialUrl
+            if eventSink == nil {
+                pendingLaunchUrl = initialUrl
+            }
         }
         return true
     }
@@ -115,6 +130,9 @@ public class SwiftFlutterAppWidgetPlugin: NSObject, FlutterPlugin, FlutterStream
         }
         if(isWidgetUrl(url: url)) {
             latestUrl = url
+            if eventSink == nil {
+                pendingLaunchUrl = url
+            }
         }
         return true
     }

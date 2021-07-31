@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    FlutterAppWidget.initialized(appGroupId: 'group.com.toner');
     FlutterAppWidget.widgetClicked.listen((event) {
       uri = event?.toString() ?? '';
       setState(() {

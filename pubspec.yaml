@@ -1,6 +1,6 @@
 name: flutter_app_widget
-description: A new Flutter project.
-version: 0.0.1
+description: A flutter plugin to provide App Widgets function for Android and iOS.
+version: 0.0.2
 repository: https://github.com/T-Oner/flutter_app_widget
 
 environment:

@@ -30,8 +30,8 @@ class FlutterAppWidget {
     });
   }
 
-  static void initialized({required String appGroupId}) {
-    _initializedIOS(appGroupId: appGroupId);
+  static Future<void> initialized({required String appGroupId}) async {
+    await _initializedIOS(appGroupId: appGroupId);
   }
 
   static Future<void> _initializedIOS({required String appGroupId}) async {
@@ -48,8 +48,8 @@ class FlutterAppWidget {
 
   static dynamic setWidgetData(
       {required String key, required String value}) async {
-    return await _channel
-        .invokeMethod('setWidgetData', <String, dynamic>{'key': key, 'value': value});
+    return await _channel.invokeMethod(
+        'setWidgetData', <String, dynamic>{'key': key, 'value': value});
   }
 
   static dynamic setWidgetDataAndUpdate(

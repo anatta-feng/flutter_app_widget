@@ -11,16 +11,17 @@ import Intents
 import OSLog
 
 struct FlutterData: Decodable, Hashable {
-    let text: String
+    let start: Bool
+    let message: String
 }
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), message: FlutterData(text: "Test"))
+        SimpleEntry(date: Date(), message: FlutterData(start: true, message: "Test"))
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), message: FlutterData(text: "Test"))
+        let entry = SimpleEntry(date: Date(), message: FlutterData(start: true, message: "Test"))
         completion(entry)
     }
 
@@ -68,8 +69,40 @@ struct FlutterAppWidgetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        Text(entry.message!.text)
-            .widgetURL(URLComponents.init(string: "http://baidu.com?flutter_app_widget")?.url)
+        VStack(alignment:.leading) {
+            
+            Image(systemName: "play.fill")
+                .font(.system(size: 25))
+            Spacer()
+            
+            Text("工作")
+                .font(.system(size: 12))
+                .fontWeight(.light)
+                .opacity(1)
+            Text(entry.message?.message ?? "NoMessage")
+                .font(.system(size: 18))
+                .fontWeight(.semibold)
+                .bold()
+                .lineLimit(1)
+                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading)
+        }
+        .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        .overlay(getTimerView()
+                    .font(.system(size: 25))
+                    .bold()
+                    .lineLimit(1)
+                    .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading))
+        .padding(.all, 12)
+        .background(ContainerRelativeShape().fill(Color.yellow))
+        .widgetURL(URLComponents.init(string: "http://baidu.com?flutter_app_widget")?.url)
+    }
+    
+    func getTimerView() -> Text {
+        if entry.message?.start ?? false {
+            return Text(Date(), style: .timer)
+        } else {
+            return Text("0:00")
+        }
     }
 }
 
@@ -88,7 +121,7 @@ struct FlutterAppWidget: Widget {
 
 struct FlutterAppWidget_Previews: PreviewProvider {
     static var previews: some View {
-        FlutterAppWidgetEntryView(entry: SimpleEntry(date: Date(), message: FlutterData(text: "Test")))
+        FlutterAppWidgetEntryView(entry: SimpleEntry(date: Date(), message: FlutterData(start: true, message: "Test")))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
