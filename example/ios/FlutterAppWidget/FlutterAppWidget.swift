@@ -70,31 +70,47 @@ struct FlutterAppWidgetEntryView : View {
 
     var body: some View {
         VStack(alignment:.leading) {
-            
-            Image(systemName: "play.fill")
+            Text("StudyStudy Study Study Study")
                 .font(.system(size: 25))
-            Spacer()
-            
-            Text("工作")
-                .font(.system(size: 12))
-                .fontWeight(.light)
-                .opacity(1)
-            Text(entry.message?.message ?? "NoMessage")
-                .font(.system(size: 18))
-                .fontWeight(.semibold)
                 .bold()
+                .lineLimit(2)
+            Text("Work")
+                .font(.system(size: 18))
                 .lineLimit(1)
-                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading)
-        }
-        .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-        .overlay(getTimerView()
-                    .font(.system(size: 25))
-                    .bold()
-                    .lineLimit(1)
-                    .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading))
-        .padding(.all, 12)
-        .background(ContainerRelativeShape().fill(Color.yellow))
-        .widgetURL(URLComponents.init(string: "http://baidu.com?flutter_app_widget")?.url)
+            Spacer()
+            HStack {
+                Text("0:00")
+                    .font(.system(size: 18))
+                Spacer()
+                            Image(systemName: "play.fill")
+                                .font(.system(size: 18))
+            }
+        }.padding()
+            
+//            Image(systemName: "play.fill")
+//                .font(.system(size: 25))
+//            Spacer()
+//
+//            Text("工作")
+//                .font(.system(size: 12))
+//                .fontWeight(.light)
+//                .opacity(1)
+//            Text(entry.message?.message ?? "NoMessage")
+//                .font(.system(size: 18))
+//                .fontWeight(.semibold)
+//                .bold()
+//                .lineLimit(1)
+//                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading)
+//        }
+//        .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+//        .overlay(getTimerView()
+//                    .font(.system(size: 25))
+//                    .bold()
+//                    .lineLimit(1)
+//                    .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,  maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/,alignment: .leading))
+//        .padding(.all, 12)
+//        .background(ContainerRelativeShape().fill(Color.yellow))
+//        .widgetURL(URLComponents.init(string: "http://baidu.com?flutter_app_widget")?.url)
     }
     
     func getTimerView() -> Text {
