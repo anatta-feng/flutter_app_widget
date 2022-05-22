@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Adapter new `onNewIntent` api
+
 ## 0.0.3
 
 * add iOS example
