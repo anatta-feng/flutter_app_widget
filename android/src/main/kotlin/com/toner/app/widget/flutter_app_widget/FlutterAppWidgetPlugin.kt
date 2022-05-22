@@ -209,12 +209,10 @@ class FlutterAppWidgetPlugin : FlutterPlugin, MethodCallHandler, EventChannel.St
         Log.d(TAG, "onDetachedFromActivity: ")
     }
 
-    override fun onNewIntent(intent: Intent?): Boolean {
+    override fun onNewIntent(intent: Intent): Boolean {
         Log.d(TAG, "onNewIntent: ")
-        intent?.let {
-            onAppLaunch(it)
-        }
-        return eventSink != null && intent != null
+        onAppLaunch(intent)
+        return eventSink != null
     }
 
 }

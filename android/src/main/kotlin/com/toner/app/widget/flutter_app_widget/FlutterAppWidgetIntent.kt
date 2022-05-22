@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 
 object FlutterAppWidgetLaunchIntent {
     const val FLUTTER_APP_WIDGET_LAUNCH_INTENT = "com.toner.app.widget.LAUNCH"
